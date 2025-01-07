@@ -68,24 +68,24 @@ public:
             }
 
             ros::Time current_time = ros::Time::now();
-            if ((current_time - last_log_time_).toSec() > 0.25)  // 根据设定频率输出日志
+            if ((current_time - last_log_time_).toSec() > (period_factor_ / 12.0))  // 根据设定频率输出日志
             {
-                ROS_INFO("S-Shape radius = %f, period_factor = %f", radius_, period_factor_);
-                ROS_INFO("S-Shape Velocity: v_x = %f, v_y = %f, v_total = %f, yaw= %f", v_x, v_y, v_total, target.yaw * 180 / (2 * M_PI));
+                ROS_INFO("S-Shape radius = %f, period_factor = %f, x = %f, y = %f, v_x = %f, v_y = %f, v_total = %f, yaw= %f", radius_, period_factor_,
+                         target.position.x, target.position.y, v_x, v_y, v_total, target.yaw * 180 / M_PI);
                 last_log_time_ = current_time;  // 更新上次输出时间
             }
         }
         else if (traj_type_ == O_SHAPE)
         {
             // 生成O形轨迹：圆形轨迹
-            target.position.x = radius_ * cos(t * 2 * M_PI) - radius_;  // 圆形曲线X坐标
-            target.position.y = radius_ * sin(t * 2 * M_PI);            // 圆形曲线Y坐标
-            target.position.z = height_;                                // 固定高度
+            target.position.x = -radius_ * cos(t * 2 * M_PI) + radius_;  // 圆形曲线X坐标
+            target.position.y = -radius_ * sin(t * 2 * M_PI);            // 圆形曲线Y坐标
+            target.position.z = height_;                                 // 固定高度
             target.yaw        = 0.0;
 
             // 计算O形轨迹的速度
-            double v_x     = -radius_ * sin(t * 2 * M_PI + 0.5 * M_PI);
-            double v_y     = radius_ * cos(t * 2 * M_PI);
+            double v_x     = radius_ * sin(t * 2 * M_PI);
+            double v_y     = -radius_ * cos(t * 2 * M_PI);
             double v_z     = 0.0;
             double v_total = sqrt(v_x * v_x + v_y * v_y + v_z * v_z);
 
@@ -93,15 +93,15 @@ public:
             if (yaw_ctl_)
             {
                 // 计算圆心指向当前位置的yaw角度，指向原点(0, 0)
-                double yaw = std::atan2(target.position.y, target.position.x + radius_);  // 计算圆心方向的yaw角
+                double yaw = std::atan2(target.position.y, target.position.x - radius_) + M_PI;  // 计算圆心方向的yaw角
                 target.yaw = yaw;
             }
 
             ros::Time current_time = ros::Time::now();
-            if ((current_time - last_log_time_).toSec() > 0.25)  // 根据设定频率输出日志
+            if ((current_time - last_log_time_).toSec() > (period_factor_ / 12.0))  // 根据设定频率输出日志
             {
-                ROS_INFO("O-Shape radius = %f, period_factor = %f", radius_, period_factor_);
-                ROS_INFO("O-Shape Velocity: v_x = %f, v_y = %f, v_total = %f, yaw= %f", v_x, v_y, v_total, target.yaw * 180 / (2 * M_PI));
+                ROS_INFO("S-Shape radius = %f, period_factor = %f, x = %f, y = %f, v_x = %f, v_y = %f, v_total = %f, yaw= %f", radius_, period_factor_,
+                         target.position.x, target.position.y, v_x, v_y, v_total, target.yaw * 180 / M_PI);
                 last_log_time_ = current_time;  // 更新上次输出时间
             }
         }
