@@ -93,7 +93,7 @@ public:
             if (yaw_ctl_)
             {
                 // 计算圆心指向当前位置的yaw角度，指向原点(0, 0)
-                double yaw = std::atan2(target.position.y, target.position.x - radius_);  // 计算圆心方向的yaw角
+                double yaw = std::atan2(target.position.y, target.position.x + radius_);  // 计算圆心方向的yaw角
                 target.yaw = yaw;
             }
 
