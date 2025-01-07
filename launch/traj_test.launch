@@ -4,7 +4,6 @@
   <arg name="frequency" value="50" />
   <arg name="height" value="2" />
   <arg name="radius" value="1" />
-  <arg name="axis_vmax" value="1" />   <!-- 单轴最大速度限制 -->
   <arg name="yaw_ctl" value="true" />  <!-- 启用yaw控制 -->
   <arg name="period_factor" value="4.0" />  <!-- 默认4s一圈角度变化 -->
 
@@ -15,7 +14,6 @@
     <param name="traj_type" value="$(arg traj_type)" />
     <param name="height" value="$(arg height)" />
     <param name="radius" value="$(arg radius)" />
-    <param name="axis_vmax" value="$(arg axis_vmax)" />
     <param name="yaw_ctl" value="$(arg yaw_ctl)" />
     <param name="period_factor" value="$(arg period_factor)" />
   </node>

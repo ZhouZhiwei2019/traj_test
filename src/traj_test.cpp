@@ -22,7 +22,6 @@ public:
         ros::param::get("~sample_frequency", frequency_);
         ros::param::get("~height", height_);
         ros::param::get("~radius", radius_);
-        ros::param::get("~axis_vmax", axis_vmax_);          //单轴最大速度
         ros::param::get("~yaw_ctl", yaw_ctl_);              // 获取是否启用yaw控制的参数
         ros::param::get("~period_factor", period_factor_);  // 获取周期控制因子
 
@@ -47,14 +46,14 @@ public:
         if (traj_type_ == S_SHAPE)
         {
             // 生成S形轨迹：简单的S形曲线
-            target.position.x = axis_vmax_ * period_factor_ * radius_ * t;  // S形曲线X坐标，一直往前走 / (2 * M_PI)
-            target.position.y = axis_vmax_ * radius_ * sin(t * 2 * M_PI);   // Y坐标随时间正弦变化
-            target.position.z = height_;                                    // 固定高度
+            target.position.x = 4.0 * radius_ * t / period_factor_;  // S形曲线X坐标，一直往前走，转一圈走4个半径长，形状比较平滑
+            target.position.y = radius_ * sin(t * 2 * M_PI);         // Y坐标随时间正弦变化
+            target.position.z = height_;                             // 固定高度
             target.yaw        = 0.0;
 
             // 计算S形轨迹的速度
-            double v_x     = axis_vmax_ * period_factor_ * radius_;  // x轴速度是固定的
-            double v_y     = axis_vmax_ * radius_ * 2 * M_PI * cos(t * 2 * M_PI);
+            double v_x     = 4.0 * radius_ / period_factor_;  // x轴速度是固定的
+            double v_y     = radius_ * 2 * M_PI * cos(t * 2 * M_PI);
             double v_z     = 0.0;
             double v_total = sqrt(v_x * v_x + v_y * v_y + v_z * v_z);
 
@@ -71,14 +70,14 @@ public:
         else if (traj_type_ == O_SHAPE)
         {
             // 生成O形轨迹：圆形轨迹
-            target.position.x = axis_vmax_ * radius_ * cos(t * 2 * M_PI + 0.5 * M_PI);  // 圆形曲线X坐标，初始相位为0开始
-            target.position.y = axis_vmax_ * radius_ * sin(t * 2 * M_PI);               // 圆形曲线Y坐标
-            target.position.z = height_;                                                // 固定高度
+            target.position.x = radius_ * cos(t * 2 * M_PI + 0.5 * M_PI);  // 圆形曲线X坐标，初始相位为0开始
+            target.position.y = radius_ * sin(t * 2 * M_PI);               // 圆形曲线Y坐标
+            target.position.z = height_;                                   // 固定高度
             target.yaw        = 0.0;
 
             // 计算O形轨迹的速度
-            double v_x     = axis_vmax_ * -radius_ * 2 * M_PI * sin(t * 2 * M_PI + 0.5 * M_PI);
-            double v_y     = axis_vmax_ * radius_ * 2 * M_PI * cos(t * 2 * M_PI);
+            double v_x     = -radius_ * 2 * M_PI * sin(t * 2 * M_PI + 0.5 * M_PI);
+            double v_y     = radius_ * 2 * M_PI * cos(t * 2 * M_PI);
             double v_z     = 0.0;
             double v_total = sqrt(v_x * v_x + v_y * v_y + v_z * v_z);
 
@@ -113,7 +112,6 @@ private:
     double         frequency_     = 50.0;     // 默认频率50Hz
     double         height_        = 1.0;      // 默认高度1m
     double         radius_        = 1.0;      // 默认半径1m
-    double         axis_vmax_     = 1.0;      // 默认单轴最大速度1m/s
     bool           yaw_ctl_       = false;    // 默认不启用yaw控制
     double         period_factor_ = 4.0;      // 默认周期因子为1，1s转2 * M_PI角度
 };
