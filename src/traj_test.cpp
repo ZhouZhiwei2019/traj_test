@@ -53,7 +53,7 @@ public:
 
             // 计算S形轨迹的速度
             double v_x     = 4.0 * radius_ / period_factor_;  // x轴速度是固定的
-            double v_y     = radius_ * 2 * M_PI * cos(t * 2 * M_PI);
+            double v_y     = radius_ * cos(t * 2 * M_PI);
             double v_z     = 0.0;
             double v_total = sqrt(v_x * v_x + v_y * v_y + v_z * v_z);
 
@@ -76,8 +76,8 @@ public:
             target.yaw        = 0.0;
 
             // 计算O形轨迹的速度
-            double v_x     = -radius_ * 2 * M_PI * sin(t * 2 * M_PI + 0.5 * M_PI);
-            double v_y     = radius_ * 2 * M_PI * cos(t * 2 * M_PI);
+            double v_x     = -radius_ * sin(t * 2 * M_PI + 0.5 * M_PI);
+            double v_y     = radius_ * cos(t * 2 * M_PI);
             double v_z     = 0.0;
             double v_total = sqrt(v_x * v_x + v_y * v_y + v_z * v_z);
 
