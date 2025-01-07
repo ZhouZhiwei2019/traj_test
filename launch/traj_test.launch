@@ -1,6 +1,6 @@
 <launch>
   <!-- 设置轨迹类型，0为S形，1为O形 -->
-  <arg name="traj_type" value="0" />
+  <arg name="traj_type" value="1" />
   <arg name="frequency" value="50" />
   <arg name="height" value="2" />
   <arg name="radius" value="1" />

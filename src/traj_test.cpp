@@ -5,8 +5,8 @@
 
 enum TrajectoryType
 {
-    S_SHAPE,
-    O_SHAPE
+    S_SHAPE = 0,
+    O_SHAPE = 1,
 };
 
 class TrajectoryPublisher
@@ -29,6 +29,8 @@ public:
 
         // 创建定时器，指定频率50Hz
         timer_ = nh_.createTimer(ros::Duration(1.0 / frequency_), &TrajectoryPublisher::publishTrajectory, this);
+        // 记录上次输出时间，用于控制日志输出频率
+        last_log_time_ = ros::Time::now();
     }
 
     // 发布轨迹点
@@ -65,7 +67,13 @@ public:
                 target.yaw = yaw;
             }
 
-            ROS_INFO("S-Shape Velocity: v_x = %f, v_y = %f, v_total = %f", v_x, v_y, v_total);
+            ros::Time current_time = ros::Time::now();
+            if ((current_time - last_log_time_).toSec() > 0.1)  // 根据设定频率输出日志
+            {
+                ROS_INFO("S-Shape radius = %f, period_factor = %f", radius_, period_factor_);
+                ROS_INFO("S-Shape Velocity: v_x = %f, v_y = %f, v_total = %f, yaw= %f", v_x, v_y, v_total, target.yaw * 180 / (2 * M_PI));
+                last_log_time_ = current_time;  // 更新上次输出时间
+            }
         }
         else if (traj_type_ == O_SHAPE)
         {
@@ -89,7 +97,13 @@ public:
                 target.yaw = yaw;
             }
 
-            ROS_INFO("O-Shape Velocity: v_x = %f, v_y = %f, v_total = %f", v_x, v_y, v_total);
+            ros::Time current_time = ros::Time::now();
+            if ((current_time - last_log_time_).toSec() > 0.25)  // 根据设定频率输出日志
+            {
+                ROS_INFO("O-Shape radius = %f, period_factor = %f", radius_, period_factor_);
+                ROS_INFO("O-Shape Velocity: v_x = %f, v_y = %f, v_total = %f, yaw= %f", v_x, v_y, v_total, target.yaw * 180 / (2 * M_PI));
+                last_log_time_ = current_time;  // 更新上次输出时间
+            }
         }
 
         pub_.publish(target);
@@ -114,6 +128,7 @@ private:
     double         radius_        = 1.0;      // 默认半径1m
     bool           yaw_ctl_       = false;    // 默认不启用yaw控制
     double         period_factor_ = 4.0;      // 默认周期因子为1，1s转2 * M_PI角度
+    ros::Time      last_log_time_;            // 上次输出日志的时间
 };
 
 int main(int argc, char** argv)
