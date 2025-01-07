@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>traj_test_node</name>
+  <version>0.0.1</version>
+  <description>The trajectory_test_node package</description>
+
+  <maintainer email="zhouzhiwei@zju.edu.cn">zzw20250107</maintainer>
+
+  <license>MIT</license>
+
+  <depend>roscpp</depend>
+  <depend>mavros_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+    <!-- Other configuration options -->
+  </export>
+</package>
+
