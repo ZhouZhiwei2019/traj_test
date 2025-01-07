@@ -40,9 +40,9 @@ public:
             target.type_mask        = mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
 
             // 生成S形轨迹：简单的S形曲线
-            target.position.x = 5.0 * sin(t);  // S形曲线X坐标
+            target.position.x = 1.0 * sin(t);  // S形曲线X坐标
             target.position.y = t;             // Y坐标随时间变化
-            target.position.z = 10.0;          // 固定高度
+            target.position.z = 1.0;           // 固定高度
         }
         else if (traj_type_ == O_SHAPE)
         {
@@ -50,9 +50,9 @@ public:
             target.type_mask        = mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
 
             // 生成O形轨迹：圆形轨迹
-            target.position.x = 5.0 * cos(t);  // 圆形曲线X坐标
-            target.position.y = 5.0 * sin(t);  // 圆形曲线Y坐标
-            target.position.z = 10.0;          // 固定高度
+            target.position.x = 1.0 * cos(t);  // 圆形曲线X坐标
+            target.position.y = 1.0 * sin(t);  // 圆形曲线Y坐标
+            target.position.z = 1.0;           // 固定高度
         }
 
         pub_.publish(target);
