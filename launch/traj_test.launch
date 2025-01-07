@@ -4,6 +4,8 @@
   <arg name="frequency" value="30" />
   <arg name="height" value="2" />
   <arg name="radius" value="1" />
+  <arg name="axis_vmax" value="1" />
+  <arg name="yaw_ctl" value="true" />  <!-- 启用yaw控制 -->
 
   <!-- 启动测试节点 -->
   <node name="traj_test_node" pkg="traj_test_node" type="traj_test_node" output="screen">
@@ -12,6 +14,8 @@
     <param name="traj_type" value="$(arg traj_type)" />
     <param name="height" value="$(arg height)" />
     <param name="radius" value="$(arg radius)" />
+    <param name="axis_vmax" value="$(arg axis_vmax)" />
+    <param name="yaw_ctl" value="$(arg yaw_ctl)" />
   </node>
 </launch>
 
