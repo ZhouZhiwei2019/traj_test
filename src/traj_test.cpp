@@ -100,7 +100,7 @@ public:
             ros::Time current_time = ros::Time::now();
             if ((current_time - last_log_time_).toSec() > (period_factor_ / 12.0))  // 根据设定频率输出日志
             {
-                ROS_INFO("S-Shape radius = %f, period_factor = %f, x = %f, y = %f, v_x = %f, v_y = %f, v_total = %f, yaw= %f", radius_, period_factor_,
+                ROS_INFO("O-Shape radius = %f, period_factor = %f, x = %f, y = %f, v_x = %f, v_y = %f, v_total = %f, yaw= %f", radius_, period_factor_,
                          target.position.x, target.position.y, v_x, v_y, v_total, target.yaw * 180 / M_PI);
                 last_log_time_ = current_time;  // 更新上次输出时间
             }

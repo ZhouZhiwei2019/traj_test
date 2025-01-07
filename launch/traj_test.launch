@@ -3,7 +3,7 @@
   <arg name="traj_type" value="0" />
   <arg name="frequency" value="50" />
   <arg name="height" value="2" />
-  <arg name="radius" value="1" />
+  <arg name="radius" value="1" />   <!-- 振幅限制 -->
   <arg name="yaw_ctl" value="true" />  <!-- 启用yaw控制 -->
   <arg name="period_factor" value="4.0" />  <!-- 默认4s一圈角度变化 -->
 
