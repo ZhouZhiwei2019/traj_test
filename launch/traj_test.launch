@@ -2,12 +2,16 @@
   <!-- 设置轨迹类型，0为S形，1为O形 -->
   <arg name="traj_type" value="0" />
   <arg name="frequency" value="30" />
+  <arg name="height" value="2" />
+  <arg name="radius" value="1" />
 
   <!-- 启动测试节点 -->
   <node name="traj_test_node" pkg="traj_test_node" type="traj_test_node" output="screen">
     <!-- 可以根据需要设置更多的参数 -->
     <param name="sample_frequency" value="$(arg frequency)" />
     <param name="traj_type" value="$(arg traj_type)" />
+    <param name="height" value="$(arg height)" />
+    <param name="radius" value="$(arg radius)" />
   </node>
 </launch>
 

@@ -20,6 +20,8 @@ public:
         traj_type_ = static_cast<TrajectoryType>(traj_type_int);  // 转换为枚举类型
 
         ros::param::get("~sample_frequency", frequency_);
+        ros::param::get("~height", height_);
+        ros::param::get("~radius", radius_);
 
         pub_ = nh_.advertise<mavros_msgs::PositionTarget>("/mavros/setpoint_raw/local", 10);
 
@@ -40,9 +42,9 @@ public:
             target.type_mask        = mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
 
             // 生成S形轨迹：简单的S形曲线
-            target.position.x = 1.0 * sin(t);  // S形曲线X坐标
-            target.position.y = t;             // Y坐标随时间变化
-            target.position.z = 1.0;           // 固定高度
+            target.position.x = radius_ * sin(t);  // S形曲线X坐标
+            target.position.y = t;                 // Y坐标随时间变化
+            target.position.z = height_;           // 固定高度
         }
         else if (traj_type_ == O_SHAPE)
         {
@@ -50,9 +52,9 @@ public:
             target.type_mask        = mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
 
             // 生成O形轨迹：圆形轨迹
-            target.position.x = 1.0 * cos(t);  // 圆形曲线X坐标
-            target.position.y = 1.0 * sin(t);  // 圆形曲线Y坐标
-            target.position.z = 1.0;           // 固定高度
+            target.position.x = radius_ * cos(t);  // 圆形曲线X坐标
+            target.position.y = radius_ * sin(t);  // 圆形曲线Y坐标
+            target.position.z = height_;           // 固定高度
         }
 
         pub_.publish(target);
@@ -72,6 +74,8 @@ private:
 
     TrajectoryType traj_type_ = S_SHAPE;  // 默认轨迹类型
     double         frequency_ = 50.0;     // 默认频率50Hz
+    double         height_    = 1.0;      // 默认高度1m
+    double         radius_    = 1.0;      // 默认半径1m
 };
 
 int main(int argc, char** argv)
