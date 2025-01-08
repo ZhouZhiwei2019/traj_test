@@ -25,7 +25,7 @@ public:
         ros::param::get("~yaw_ctl", yaw_ctl_);              // 获取是否启用yaw控制的参数
         ros::param::get("~period_factor", period_factor_);  // 获取周期控制因子
 
-        pub_ = nh_.advertise<mavros_msgs::PositionTarget>("/mavros/setpoint_raw/local", 10);
+        pub_ = nh_.advertise<mavros_msgs::PositionTarget>("ctl_topic", 10);
 
         // 创建定时器，指定频率50Hz
         timer_ = nh_.createTimer(ros::Duration(1.0 / frequency_), &TrajectoryPublisher::publishTrajectory, this);
@@ -48,13 +48,13 @@ public:
         if (traj_type_ == S_SHAPE)
         {
             // 生成S形轨迹：简单的S形曲线
-            target.position.x = 4.0 * radius_ * t / period_factor_;  // S形曲线X坐标，一直往前走，转一圈走4个半径长，形状比较平滑
-            target.position.y = radius_ * sin(t * 2 * M_PI);         // Y坐标随时间正弦变化
-            target.position.z = height_;                             // 固定高度
+            target.position.x = radius_ * t / period_factor_;  // S形曲线X坐标，一直往前走，转一圈走4个半径长，形状比较平滑
+            target.position.y = radius_ * sin(t * 2 * M_PI);   // Y坐标随时间正弦变化
+            target.position.z = height_;                       // 固定高度
             target.yaw        = 0.0;
 
             // 计算S形轨迹的速度
-            double v_x     = 4.0 * radius_ / period_factor_;  // x轴速度是固定的
+            double v_x     = radius_ / period_factor_;  // x轴速度是固定的
             double v_y     = radius_ * cos(t * 2 * M_PI);
             double v_z     = 0.0;
             double v_total = sqrt(v_x * v_x + v_y * v_y + v_z * v_z);
@@ -109,11 +109,11 @@ public:
         pub_.publish(target);
 
         // 更新时间步长，除以周期因子来调整周期
-        t += 1 / (frequency_ * period_factor_);  // 增加时间，模拟轨迹上的点
+        t += 1 / (frequency_ * 8 * period_factor_);  // 增加时间，模拟轨迹上的点
 
-        if (t > 20 * period_factor_)  // 限制t值，避免无限增大
+        if (t > 16 * period_factor_)  // 限制t值，避免无限增大
         {
-            t = 0.0;
+            t = 16 * period_factor_;
         }
     }
 
@@ -127,7 +127,7 @@ private:
     double         height_        = 1.0;      // 默认高度1m
     double         radius_        = 1.0;      // 默认半径1m
     bool           yaw_ctl_       = false;    // 默认不启用yaw控制
-    double         period_factor_ = 4.0;      // 默认周期因子为1，1s转2 * M_PI角度
+    double         period_factor_ = 1.0;      // 默认周期因子为1，1s转2 * M_PI角度
     ros::Time      last_log_time_;            // 上次输出日志的时间
 };
 

@@ -5,11 +5,12 @@
   <arg name="height" value="2" />
   <arg name="radius" value="1" />   <!-- 振幅限制 -->
   <arg name="yaw_ctl" value="true" />  <!-- 启用yaw控制 -->
-  <arg name="period_factor" value="4.0" />  <!-- 默认4s一圈角度变化 -->
+  <arg name="period_factor" value="1.0" />  <!-- 1.0默认8s一圈角度变化，2.0则为16s一圈，0.5则为4s一圈 -->
 
   <!-- 启动测试节点 -->
   <node name="traj_test_node" pkg="traj_test_node" type="traj_test_node" output="screen">
     <!-- 可以根据需要设置更多的参数 -->
+    <remap from="/ctl_topic" to="/mavros/setpoint_raw/local"/> <!-- /drone$(arg drone_id) -->
     <param name="sample_frequency" value="$(arg frequency)" />
     <param name="traj_type" value="$(arg traj_type)" />
     <param name="height" value="$(arg height)" />
