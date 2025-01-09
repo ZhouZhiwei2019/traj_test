@@ -111,9 +111,9 @@ public:
         // 更新时间步长，除以周期因子来调整周期
         t += 1 / (frequency_ * 8 * period_factor_);  // 增加时间，模拟轨迹上的点
 
-        if (t > 16 * period_factor_)  // 限制t值，避免无限增大
+        if (t > 4 * period_factor_ / radius_)  // 限制t值，避免无限增大
         {
-            t = 16 * period_factor_;
+            t = 4 * period_factor_ / radius_;
         }
     }
 
