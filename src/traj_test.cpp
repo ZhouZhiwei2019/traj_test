@@ -39,10 +39,10 @@ public:
         static double               t = 0.0;
         mavros_msgs::PositionTarget target;
 
+        target.header.stamp     = ros::Time::now();
+        target.header.frame_id  = "world";  // 设置为全局参考坐标系
         target.coordinate_frame = mavros_msgs::PositionTarget::FRAME_LOCAL_NED;
-        target.type_mask        = mavros_msgs::PositionTarget::IGNORE_VX | mavros_msgs::PositionTarget::IGNORE_VY | mavros_msgs::PositionTarget::IGNORE_VZ
-                           | mavros_msgs::PositionTarget::IGNORE_AFX | mavros_msgs::PositionTarget::IGNORE_AFY | mavros_msgs::PositionTarget::IGNORE_AFZ
-                           | mavros_msgs::PositionTarget::IGNORE_YAW_RATE;
+        target.type_mask        = 0;  // 确保不忽略任何字段，控制位置、速度、加速度、偏航角和偏航速率
 
         // 根据轨迹类型生成目标点
         if (traj_type_ == S_SHAPE)
